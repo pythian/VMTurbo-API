@@ -29,3 +29,16 @@ shared_examples_for 'a connection to VMTurbo' do
 		end
 	end
 end
+shared_examples 'return market' do
+	it "will return a valid dataset" do
+		market_response = subject.GetListOfMarkets(market_name)
+		expect(market_response.xpath("#{xpath}").to_s).to include "#{valid_data}"
+	end
+end
+
+shared_examples 'return entity' do
+	it "valid hash" do
+		data_result = market.GetServiceEntity(market_name, entity_type)
+		expect(data_result['ServiceEntities']['ServiceEntity'][0]['creationClassName']).to eql "#{valid_data}"
+	end
+end
