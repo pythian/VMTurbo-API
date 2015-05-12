@@ -48,30 +48,41 @@ describe Market do
 		end
 	end
 
-	describe "#GetServiceEntity" do
+	describe "#GetEntityList" do
 
 		let(:market_name) {"Market"}
+		let(:classname)   { nil }
+		let(:entity)	  { nil }
+		let(:property)    { nil }
+		let(:services)	  { nil }
+		let(:resource)    { nil }
 		
 		context "will return a hash of entities" do
+
+			let(:entity_root) {'ServiceEntities'}
+			let(:entity_node) {'ServiceEntity'}
+			let(:entity_attr) {'creationClassName'}
+			
+
 			context "all market entities" do
 
-				let(:entity_type) { "all" }
 				let(:valid_data)  { "Application" }
 				it_behaves_like 'return entity'
 			end
 
 			context "single type of entity" do
 				let(:valid_data)  {"Storage"}
-				let(:entity_type) { valid_data }
+				let(:classname) { valid_data }
+
 				it_behaves_like 'return entity'	
 			end
-		end
-
-		context "will throw an exception" do
-			let(:market_name) {"Market"}
-			let(:entity_type) {"badentity"}
-			it "with bad entity data" do 
-				expect{data_result = market.GetServiceEntity(market_name, entity_type)}.to raise_exception ArgumentError
+		
+			context "will throw an exception" do
+				let(:market_name) {"Market"}
+				let(:classname) {"badentity"}
+				it "with bad entity data" do 
+					expect{data_result = market.GetEntityList(market_name, {:classname => classname, :entity => entity, :property => property, :services => services, :resource => resource})}.to raise_exception ArgumentError
+				end
 			end
 		end
 	end

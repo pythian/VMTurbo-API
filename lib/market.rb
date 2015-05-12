@@ -42,13 +42,31 @@ class Market
 		
 	end
 
-	def GetServiceEntity(market_name, entity_type)
-
-		if entity_type.downcase == 'all'
+	##
+	# GetEntityList Method Arguments
+	# 
+	# Required
+	# market_name => Name of market you want to get entities from
+	#
+	# Optional
+	# :classname => Entity Type                         :: Default list all
+	# :entity    => Internal Name                       :: Default is nil
+	# :property  => priceIndex, Produces, ProducesSize  :: Default is nil
+	# :services  => individual service or list all      :: Default is nil
+	# :resource  => get a selection of resources or all :: Default is nil
+	##   
+	def GetEntityList(market_name, entity_query = {})
+		
+		if entity_query[:classname] == nil
 			api_endpoint = "#{market_name}/entities"
 		else
-			api_endpoint = "#{market_name}/entities?classname=#{entity_type}"
+			api_endpoint = "#{market_name}/entities?classname=#{entity_query[:classname]}"
 		end
+
+		api_endpoint = api_endpoint.to_s + "&#{entity_query[:entity]}"     if entity_query[:entity] == !nil
+		api_endpoint = api_endpoint.to_s + "&#{entity_query[:property]}"   if entity_query[:property] == !nil
+		api_endpoint = api_endpoint.to_s + "&#{entity_query[:services]}"   if entity_query[:services] == !nil
+		api_endpoint = api_endpoint.to_s + "&#{entity_query[:resource]}"   if entity_query[:resource] == !nil
 
 		entity_data = GetListOfMarkets(api_endpoint) 
 		entity_data_hash = Hash.from_xml(entity_data.to_s)

@@ -38,7 +38,7 @@ end
 
 shared_examples 'return entity' do
 	it "valid hash" do
-		data_result = market.GetServiceEntity(market_name, entity_type)
-		expect(data_result['ServiceEntities']['ServiceEntity'][0]['creationClassName']).to eql "#{valid_data}"
+		data_result = market.GetEntityList(market_name, {:classname => classname, :entity => entity, :property => property, :services => services, :resource => resource})
+		expect(data_result[entity_root][entity_node][0][entity_attr]).to eql "#{valid_data}"
 	end
 end
