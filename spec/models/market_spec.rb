@@ -6,49 +6,48 @@ describe Market do
  	let(:vmt_userid)    { VMT_USERID }
 	let(:vmt_password)  { VMT_PASSWORD }
 	let(:vmt_url)       { VMT_BASE_URL }
-
+	
+	
 	describe "Shoule be a valid VMT API object" do
 		it_behaves_like "a VMT API object"
 	end
 
-	describe "#GetListOfMarkets" do
-
-		let(:xpath)       {'//TopologyElement[@displayName="Market"]'}
+	describe "#get_list" do
+		
+		let(:entity_root) {'TopologyElements'}
+		let(:entity_node) {'TopologyElement'}
+		let(:entity_attr) {'creationClassName'}
 		let(:valid_data)  {'Market'}
-		context "will make a call to VMTurbo" do
-			context "will return all markets" do
-				
-				let(:market_name) {}
-				it_behaves_like 'return market'
-			end
 
-			context "will return a single market" do
-				
-				let(:market_name) {'Market'}
-				it_behaves_like 'return market'
-			end
+	
+		context "will return all markets" do
+
+			let(:market_name) { nil }
+			it_behaves_like 'return market'
 		end
 	end
 	
-	describe "#GetSingleMarketData" do
-		context "will return single market array" do
+	describe "#get_single_market_data" do
+
+		
+		context "will return a single market" do
 			
 			let(:market_name) {'Market'}
-			it "will get the real time market " do			
-				results = market.GetSingleMarketData(market_name)
-				expect(results["displayName"]).to eq "Market"
+			it "as a single hash" do			
+				results = market.get_single_market_data(market_name)
+				expect(results['displayName']).to eq "Market"
 			end
 		end
 		context "will throw an exception" do
 			
 			let(:market_name) {'badmarketdata'}
 			it "if the market does not exist" do
-				expect{results = market.GetSingleMarketData(market_name)}.to raise_exception ArgumentError
+				expect{results = market.get_single_market_data(market_name)}.to raise_exception ArgumentError
 			end
 		end
 	end
 
-	describe "#GetEntityList" do
+	describe "#get_entity_list" do
 
 		let(:market_name) {"Market"}
 		let(:classname)   { nil }
@@ -70,20 +69,33 @@ describe Market do
 				it_behaves_like 'return entity'
 			end
 
-			context "single type of entity" do
+			context "single type of entity class" do
 				let(:valid_data)  {"Storage"}
 				let(:classname) { valid_data }
 
 				it_behaves_like 'return entity'	
 			end
+
+			context "single class entity" do
+				let(:classname)  {'Storage'}
+				let(:entity)     {'datastore-64'}
+				let(:valid_data) { classname }
+
+				it_behaves_like 'return entity'
+			end
+
 		
 			context "will throw an exception" do
 				let(:market_name) {"Market"}
 				let(:classname) {"badentity"}
 				it "with bad entity data" do 
-					expect{data_result = market.GetEntityList(market_name, {:classname => classname, :entity => entity, :property => property, :services => services, :resource => resource})}.to raise_exception ArgumentError
+					expect{data_result = market.get_entity_list(market_name, {:classname => classname, :entity => entity, :property => property, :services => services, :resource => resource})}.to raise_exception ArgumentError
 				end
 			end
 		end
+	end
+
+	describe "#get_entity_by_type" do
+
 	end
 end
