@@ -1,0 +1,14 @@
+#VMTurbo Classname
+ - VirtualApplication
+ - Application
+ - Container
+ - VirtualMachine
+ - PhysicalMachine
+ - Storage
+ - DiskArray
+ - StorageController
+ - Switch
+ - VPod
+ - DPod
+ - VirtualDatacenter
+ - DataCenter
