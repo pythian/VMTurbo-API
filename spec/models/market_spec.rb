@@ -116,7 +116,7 @@ describe Market do
 
 				
 				let(:valid_data)        { "Application" }
-				let(:entity_parameters) { nil }
+				
 				it "valid hash" do
 					data_result = market.get_entity_list(market_name)
 					expect(data_result[entity_root][entity_node][0][entity_attr]).to eql "#{valid_data}"
@@ -167,14 +167,17 @@ describe Market do
 		let(:resource)    { nil }
 		context "will get an entity type" do
 			
-			let(:entity_root) {'ServiceEntities'}
-			let(:entity_node) {'ServiceEntity'}
-			let(:entity_attr) {'displayName'}
-			let(:valid_data)  {'XenServer1'}
+			let(:entity_root)   {'ServiceEntities'}
+			let(:entity_node)   {'ServiceEntity'}
+			let(:entity_type)   {'hosts'}
+			let(:entity)        {'com.xensource.xenapi.Host@b0e93fc6'}
+			let(:entity_attr)   {'displayName'}
+			let(:valid_data)    {'XenServer1'}
+			let(:entity_query)  {{:entity => entity}}
 			
 			it "will return a valid hash" do
-				data_result = market.get_entity_by_type(market_name, entity_type, {:entity => entity, :property => property, :services => services, :resource => resource})
-				expect(data_result[entity_root][entity_node][0][entity_attr]).to eql "#{valid_data}"
+				data_result = market.get_entity_by_type(market_name, entity_type, entity_query)
+				expect(data_result[entity_root][entity_node][entity_attr]).to eql "#{valid_data}"
 			end
 		end
 
@@ -192,22 +195,33 @@ describe Market do
 
 	describe "#get_entity_by_name" do
 		let(:market_name) {"Market"}
-		let(:entity_type) {'hosts'}
-		let(:entity_name) {'datastore-64'}
+		let(:entity_type) {'datastores'}
+		let(:entity_root) {'ServiceEntities'}
+		let(:entity_node) {'ServiceEntity'}
+		let(:entity_attr) {'name'}
 		let(:property)    { nil }
 		let(:services)	  { nil }
 		let(:resource)    { nil }
 		let(:starttime)   { nil }
 		let(:endtime)     { nil }
 
-		context "will get an entity by name" do
-			let(:entity_root) {'ServiceEntities'}
-			let(:entity_node) {'ServiceEntity'}
-			let(:entity_attr) {'name'}
-			let(:valid_data)  {'datastore-64'}
+		context "get entity data" do
+			
+			
+			let(:entity_name) {'datastore-64'}
+			let(:valid_data)  {entity_name}
+			it "will get the entity by name" do
+				data_result = market.get_entity_by_name(market_name, entity_type, entity_name)
+				expect(data_result[entity_root][entity_node][entity_attr]).to eql "#{valid_data}"
+			end
+		end
+		context "get entity data" do
 
-			it "will return a valid hash" do
-				data_result = market.get_entity_by_name(market_name, entity_type, entity_name,{:property => property, :services => services, :resource => resource, :starttime => starttime, :endtime => endtime})
+			let(:entity_name) {'4f7c3a15-76877636-7a99-002590024b37'}
+			let(:entity_attr) {'uuid'}
+			let(:valid_data)  {entity_name}
+			it "will get the entity by UUID" do
+				data_result = market.get_entity_by_name(market_name, entity_type, entity_name)
 				expect(data_result[entity_root][entity_node][entity_attr]).to eql "#{valid_data}"
 			end
 

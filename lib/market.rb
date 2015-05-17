@@ -46,6 +46,7 @@ class Market
 		return query
 	end
 
+#Get list of markets from VMT
 	def get_list(market_name)
 
 		##
@@ -155,6 +156,31 @@ class Market
 
 	def get_entity_by_name(market_name, entity_type, entity_name, entity_query = {})
 
+		##
+		# Will get data of a named entity of a specified type
+		# Method Arguments
+		# 
+		# Required
+		# market_name => Name of market you want to get entities from
+		# entity_type => Valid entity type                  :: must match from entity_type.yml
+		# entity_name => Valid entity internal name or UUID 
+		#
+		# Optional
+		#
+		# :property  => priceIndex, Produces, ProducesSize  :: 
+		# :services  => individual service or list all      :: The resources the entity is selling
+		# :resource  => get a selection of resources or all :: The resources the entity is buying
+		##
+
+		#Validate that the entity_type is present and is in the entity_type.yml
+		raise ArgumentError, "No Entity Type Passed"  if entity_type.nil?
+		raise ArgumentError, "Bad Entity Type Passed" if !entity_type_check(entity_type)
+		
+		#Build URI query and get data
+		api_endpoint = query_builder("#{market_name}/#{entity_type}/#{entity_name}",entity_query) if !entity_query.nil?
+		entity_data = get_list(api_endpoint)
+
+		return entity_data
 
 	end
 

@@ -63,4 +63,8 @@ shared_examples 'a single entity' do
 	end
 end
 
+shared_examples 'get entity data' do
+	
+end
+
 
