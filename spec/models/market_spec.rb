@@ -134,14 +134,15 @@ describe Market do
 
 			context "single class entity" do
 				
+				let(:data_result)  {market.get_entity_list(market_name, entity_query)}
 				let(:classname)    {'Storage'}
 				let(:entity)	   {'datastore-64'}
 				let(:entity_query) {{:classname => classname, :entity => entity}}
-				let(:entity_attr) {'name'}
-				let(:valid_data)  {entity}
+				let(:entity_attr)  {'name'}
+				let(:valid_data)   {entity}
 				
 				context "retuns a single entity valid hash" do
-					it_behaves_like 'a single entity'
+					it_behaves_like 'get entity data'
 				end
 			end
 
@@ -150,9 +151,9 @@ describe Market do
 				let(:market_name)  {"Market"}
 				let(:classname)    {"badentity"}
 				let(:entity_query) {{:classname => classname}}
-				it "with bad entity data" do 
-					expect{data_result = market.get_entity_list(market_name, entity_query)}.to raise_exception ArgumentError
-				end
+				let(:data_result)  {market.get_entity_list(market_name, entity_query)}
+				
+				it_behaves_like 'Errors'
 			end
 		end
 	end
@@ -165,6 +166,8 @@ describe Market do
 		let(:property)    { nil }
 		let(:services)	  { nil }
 		let(:resource)    { nil }
+		
+
 		context "will get an entity type" do
 			
 			let(:entity_root)   {'ServiceEntities'}
@@ -174,21 +177,23 @@ describe Market do
 			let(:entity_attr)   {'displayName'}
 			let(:valid_data)    {'XenServer1'}
 			let(:entity_query)  {{:entity => entity}}
+			let(:data_result)   {market.get_entity_by_type(market_name, entity_type, entity_query)}
 			
-			it "will return a valid hash" do
-				data_result = market.get_entity_by_type(market_name, entity_type, entity_query)
-				expect(data_result[entity_root][entity_node][entity_attr]).to eql "#{valid_data}"
-			end
+			it_behaves_like 'get entity data'
 		end
 
 		context "will throw an exception" do
-			context "with the wrong" do
+			let(:data_result) {market.get_entity_by_type(market_name, entity_type)}
+			
+			context "with the wrong entity type" do
 				let(:entity_type) {'badentity'}
-				it_behaves_like "entity data"
+				
+				it_behaves_like "Errors"
 			end
-			context "with no" do
+			context "with no entity" do
 				let(:entity_type) { nil }
-				it_behaves_like "entity data"
+				
+				it_behaves_like "Errors"
 			end
 		end
 	end
@@ -205,27 +210,55 @@ describe Market do
 		let(:starttime)   { nil }
 		let(:endtime)     { nil }
 
-		context "get entity data" do
+		context "get entity data by name" do
 			
-			
+			let(:data_result) {market.get_entity_by_name(market_name, entity_type, entity_name)}		
 			let(:entity_name) {'datastore-64'}
 			let(:valid_data)  {entity_name}
-			it "will get the entity by name" do
-				data_result = market.get_entity_by_name(market_name, entity_type, entity_name)
-				expect(data_result[entity_root][entity_node][entity_attr]).to eql "#{valid_data}"
-			end
-		end
-		context "get entity data" do
 
+			it_behaves_like 'get entity data'
+		end
+		context "get entity data by UUID" do
+			
+			let(:data_result) {market.get_entity_by_name(market_name, entity_type, entity_name)}
 			let(:entity_name) {'4f7c3a15-76877636-7a99-002590024b37'}
 			let(:entity_attr) {'uuid'}
 			let(:valid_data)  {entity_name}
-			it "will get the entity by UUID" do
-				data_result = market.get_entity_by_name(market_name, entity_type, entity_name)
-				expect(data_result[entity_root][entity_node][entity_attr]).to eql "#{valid_data}"
-			end
-
+			
+			it_behaves_like 'get entity data'
 		end
+	end
+
+	describe "#get_entity_services" do
+		let(:market_name) {"Market"}
+		let(:entity_type) {'datastores'}
+		let(:entity_root) {'ServiceEntity'}
+		let(:entity_node) {'Commodity'}
+		let(:entity_attr) {'creationClassName'}
+		let(:property)    { nil }
+		let(:services)	  { nil }
+		let(:resource)    { nil }
+		let(:starttime)   { nil }
+		let(:endtime)     { nil }
+
+		context "get entity data by name" do
+
+			let(:data_result) {market.get_entity_services(market_name, entity_type, entity_name)}
+			let(:entity_name) {'datastore-64'}
+			let(:valid_data)  {'Storage'}
+			
+			it_behaves_like 'get entity data'
+		end
+
+		context "get entity data by UUID" do
+
+			let(:data_result) {market.get_entity_services(market_name, entity_type, entity_name)}
+			let(:entity_name) {'4f7c3a15-76877636-7a99-002590024b37'}
+			let(:valid_data)  {'Storage'}
+			
+			it_behaves_like 'get entity data'
+		end
+
 	end
 
 

@@ -38,7 +38,7 @@ shared_examples 'a valid result' do
 end
 shared_examples 'return market' do
 	it "with a valid dataset" do
-		data_result = subject.get_list(market_name)
+		data_result = market.get_list(market_name)
 		expect(data_result[entity_root][entity_node][0][entity_attr]).to eql "#{valid_data}"
 	end
 end
@@ -50,21 +50,18 @@ shared_examples 'return entity' do
 	end
 end
 
-shared_examples 'entity data' do
+shared_examples 'Errors' do
 	it "with bad entity data" do 
-					expect{data_result = market.get_entity_by_type(market_name, entity_type, {:entity => entity, :property => property, :services => services, :resource => resource})}.to raise_exception ArgumentError
+		
+		expect{data_result}.to raise_exception ArgumentError
 	end	
   
 end
-shared_examples 'a single entity' do
-	it "valid hash" do
-		data_result = market.get_entity_list(market_name, entity_query)
-		expect(data_result[entity_root][entity_node][entity_attr]).to eql "#{valid_data}"
-	end
-end
 
 shared_examples 'get entity data' do
-	
+	it "will get entity data" do
+		expect(data_result[entity_root][entity_node][entity_attr]).to eql "#{valid_data}"
+	end
 end
 
 

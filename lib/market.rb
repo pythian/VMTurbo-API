@@ -183,6 +183,8 @@ class Market
 		return entity_data
 
 	end
+	def get_entity_services(market_name, entity_type, entity_name, entity_query = {})
+	end
 
 	
 
