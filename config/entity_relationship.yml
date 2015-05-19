@@ -1,0 +1,65 @@
+virtualapplicatons:
+ -applications
+
+applications:
+  -virtualapplicatons
+  -virtualmachines
+  -containers
+
+containers:
+ -virtualmachines
+ -applications
+
+virtualmachines:
+ -applications
+ -datastores
+ -hosts
+ -containers
+
+hosts:
+ -virtualmachines
+ -datastores
+ -iomodules
+ -datacenters
+
+datastores:
+ -hosts
+ -diskarrays
+
+diskarrays:
+ -datastores
+ -storagecontrollers
+
+storagecontrollers:
+ -diskarrays
+
+iomodules:
+ -hosts
+ -switches
+ -datacenters
+
+switches:
+ -iomodules
+
+vpods:
+ -dpods
+ -virtualmachines
+
+dpods:
+ -hosts
+ -datastores
+ -vpods
+
+virtualdatacenters:
+ -hosts
+ -datastores
+ -virtualdatacenters
+ -virtualmachines
+
+datacenters:
+ -hosts
+ -iomodules
+
+groups:
+ -hostcomparison
+ -storagecomparison

@@ -117,10 +117,6 @@ describe Market do
 				
 				let(:valid_data)        { "Application" }
 				
-				it "valid hash" do
-					data_result = market.get_entity_list(market_name)
-					expect(data_result[entity_root][entity_node][0][entity_attr]).to eql "#{valid_data}"
-				end
 			end
 
 			context "single type of entity class" do
@@ -243,16 +239,13 @@ describe Market do
 
 		context "get entity data by name" do
 
-			let(:data_result) {market.get_entity_services(market_name, entity_type, entity_name)}
 			let(:entity_name) {'datastore-64'}
 			let(:valid_data)  {'Storage'}
 			
-			it_behaves_like 'get entity data'
 		end
 
 		context "get entity data by UUID" do
 
-			let(:data_result) {market.get_entity_services(market_name, entity_type, entity_name)}
 			let(:entity_name) {'4f7c3a15-76877636-7a99-002590024b37'}
 			let(:valid_data)  {'Storage'}
 			

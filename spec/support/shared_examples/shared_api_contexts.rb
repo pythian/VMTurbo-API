@@ -45,14 +45,12 @@ end
 
 shared_examples 'return entity' do
 	it "valid hash" do
-		data_result = market.get_entity_list(market_name, entity_query)
 		expect(data_result[entity_root][entity_node][0][entity_attr]).to eql "#{valid_data}"
 	end
 end
 
 shared_examples 'Errors' do
 	it "with bad entity data" do 
-		
 		expect{data_result}.to raise_exception ArgumentError
 	end	
   

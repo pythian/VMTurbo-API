@@ -170,6 +170,8 @@ class Market
 		# :property  => priceIndex, Produces, ProducesSize  :: 
 		# :services  => individual service or list all      :: The resources the entity is selling
 		# :resource  => get a selection of resources or all :: The resources the entity is buying
+		# :starttime => get the starttime for the data      :: This is in UTC
+		# :endtime   => get the end time                    :: This is in UTC
 		##
 
 		#Validate that the entity_type is present and is in the entity_type.yml
@@ -177,15 +179,147 @@ class Market
 		raise ArgumentError, "Bad Entity Type Passed" if !entity_type_check(entity_type)
 		
 		#Build URI query and get data
-		api_endpoint = query_builder("#{market_name}/#{entity_type}/#{entity_name}",entity_query) if !entity_query.nil?
+		if !entity_query.nil?
+			api_endpoint = query_builder("#{market_name}/#{entity_type}/#{entity_name}",entity_query)
+		else
+			api_endpoint = "#{market_name}/#{entity_type}/#{entity_name}"
+		end
 		entity_data = get_list(api_endpoint)
 
 		return entity_data
 
 	end
 	def get_entity_services(market_name, entity_type, entity_name, entity_query = {})
+
+		##
+		# Will get the provided commodities of the named entity either by internal name or UUID
+		# Method Arguments
+		# 
+		# Required
+		# market_name => Name of market you want to get entities from
+		# entity_type => Valid entity type                  :: must match from entity_type.yml
+		# entity_name => Valid entity internal name or UUID 
+		#
+		# Optional
+		#
+		# :property  => priceIndex, Produces, ProducesSize  :: 
+		# :services  => individual service or list all      :: The resources the entity is selling by name
+		# :starttime => get the starttime for the data      :: This is in UTC
+		# :endtime   => get the end time                    :: This is in UTC
+		#
+		##
+		raise ArgumentError, "No Entity Type Passed"  if entity_type.nil?
+		raise ArgumentError, "Bad Entity Type Passed" if !entity_type_check(entity_type)
+		
+		#Build URI query and get data
+		if !entity_query.nil?
+			api_endpoint = query_builder("#{market_name}/#{entity_type}/#{entity_name}/services",entity_query)
+		else
+			api_endpoint = "#{market_name}/#{entity_type}/#{entity_name}/services"
+		end
+		entity_data = get_list(api_endpoint)
+
+		return entity_data
+
+	end	
+	def get_entity_resources(market_name, entity_type, entity_name, entity_query = {})
+
+		##
+		# Will get the resources provided by the named entity either by internal name or UUID
+		# Method Arguments
+		# 
+		# Required
+		# market_name => Name of market you want to get entities from
+		# entity_type => Valid entity type                  :: must match from entity_type.yml
+		# entity_name => Valid entity internal name or UUID 
+		#
+		# Optional
+		#
+		# :property  => priceIndex, Produces, ProducesSize  :: 
+		# :resource  => individual resource      			:: The resources the entity is selling by name
+		# :starttime => get the starttime for the data      :: This is in UTC
+		# :endtime   => get the end time                    :: This is in UTC
+		#
+		##
+		raise ArgumentError, "No Entity Type Passed"  if entity_type.nil?
+		raise ArgumentError, "Bad Entity Type Passed" if !entity_type_check(entity_type)
+		
+		#Build URI query and get data
+		if !entity_query.nil?
+			api_endpoint = query_builder("#{market_name}/#{entity_type}/#{entity_name}/resources",entity_query)
+		else
+			api_endpoint = "#{market_name}/#{entity_type}/#{entity_name}/resources"
+		end
+		entity_data = get_list(api_endpoint)
+
+		return entity_data
+
 	end
 
+	def get_related_entities(market_name, source_entity_type, entity_name, related_entity_type, entity_query = {})
+
+		##
+		# Will get the provided commodities of the named entity either by internal name or UUID
+		# Method Arguments
+		# 
+		# Required
+		# market_name => Name of market you want to get entities from
+		# source_entity_type => this is the source entity type  :: must match from entity_type.yml
+		# entity_name => Valid entity internal name or UUID 
+		# related_entity_type => Valid related entity type      :: must match relationship from entity_relationship.yml
+		# 						 for look up
+		#
+		# Optional
+		#
+		# :property  => priceIndex, Produces, ProducesSize  	:: 
+		# :resource  => individual resource      				:: The resources the entity is selling by name
+		# :starttime => get the starttime for the data      	:: This is in UTC
+		# :endtime   => get the end time                    	:: This is in UTC
+		#
+		##
+		raise ArgumentError, "No Source Entity Type Passed"  if source_entity_type.nil? || related_entity_type.nil?  
+		raise ArgumentError, "Bad Entity Type Passed" if !entity_type_check(source_entity_type) || !entity_type_check(related_entity_type)
+		
+		#Build URI query and get data
+		if !entity_query.nil?
+			api_endpoint = query_builder("#{market_name}/#{source_entity_type}/#{entity_name}/#{related_entity_type}",entity_query)
+		else
+			api_endpoint = "#{market_name}/#{source_entity_type}/#{entity_name}/#{related_entity_type}"
+		end
+		entity_data = get_list(api_endpoint)
+
+		return entity_data
+	end
+
+	def get_entity_actions(market_name, entity_type, entity_name, entity_query = {})
+
+		##
+		# Will get the related actions by the named entity either by internal name or UUID
+		# Method Arguments
+		# 
+		# Required
+		# market_name => Name of market you want to get entities from
+		# entity_type => Valid entity type                  :: must match from entity_type.yml
+		# entity_name => Valid entity internal name or UUID 
+		#
+		# Optional
+		#
+		# :complete  => true | false 						::  
+		#
+		##
+		raise ArgumentError, "No Entity Type Passed"  if entity_type.nil?
+		raise ArgumentError, "Bad Entity Type Passed" if !entity_type_check(entity_type)
+		
+		#Build URI query and get data
+		if !entity_query.nil?
+			api_endpoint = query_builder("#{market_name}/#{entity_type}/#{entity_name}/actionitems",entity_query)
+		else
+			api_endpoint = "#{market_name}/#{entity_type}/#{entity_name}/actionitems"
+		end
+		entity_data = get_list(api_endpoint)
+
+		return entity_data
+	end
 	
 
 
