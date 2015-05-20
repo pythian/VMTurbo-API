@@ -31,11 +31,11 @@ class Reservation
 	def get_reservation(reservation_ID, state = {})
 
 		##
-		# Gets a list of entities from a market
+		# Gets a reservation details
 		#
 		# Optional Methods
-		# market_name => name of market  :: Default list all markets
-		#
+		# reservation_ID => UUID of the reservation  :: Default list all reservations
+		# state => 	the state of the reservation 	 :: Call the state of the reservation
 		##
 
 		if reservation_ID.nil?
@@ -55,4 +55,6 @@ class Reservation
 		
 		return data_hash
 	end
+
+
 end
