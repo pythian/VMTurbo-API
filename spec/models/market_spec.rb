@@ -410,6 +410,37 @@ describe Market do
 		end
 	end
 
+	describe "#get_entity_audit_log" do
+		let(:market_name) 	{"Market"}
+		let(:entity_UUID)	{'420526e0-f665-3959-de7b-d80844c1f39f'}
+		let(:entity_root) 	{'audit_log_entries'}
+		let(:entity_node) 	{'audit_log_entry'}
+		let(:entity_attr) 	{'action_name'}
+		let(:valid_data)	{'Action Completed'}
+		let(:property)    	{ nil }
+		let(:services)	  	{ nil }
+		let(:resource)    	{ nil }
+		let(:starttime)   	{ nil }
+		let(:endtime)       { nil }
+		let(:data_result) 	{market.get_entity_audit_log(market_name, entity_UUID)}
+
+		context "get related entity data by name" do
+			it_behaves_like 'return entity'
+		end
+
+		context "get related entity data by UUID" do
+			it_behaves_like 'return entity'
+		end
+		context "will throw an exception" do
+			
+			context "with no entity" do
+				let(:entity_UUID) { nil }
+				
+				it_behaves_like "Errors"
+			end
+		end
+	end
+
 
 
 

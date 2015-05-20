@@ -321,6 +321,33 @@ class Market
 		return entity_data
 	end
 	
+	def get_entity_audit_log(market_name, entity_UUID, entity_query = {})
+
+		##
+		# Will get the related actions by the named entity either by internal name or UUID
+		# Method Arguments
+		# 
+		# Required
+		# market_name => Name of market you want to get entities from
+		# entity_UUID => Valid entity UUID               				:: must be a valid UUID
+		# entity_name => Valid entity internal name or UUID 
+		#
+		# Optional
+		# :starttime => This is the start time of when you want to retrieve the audit logs
+		#
+		##
+		raise ArgumentError, "No Entity UUID Passed"  if entity_UUID.nil?
+		
+		#Build URI query and get data
+		if !entity_query.nil?
+			api_endpoint = query_builder("#{market_name}/entities/#{entity_UUID}/auditentries",entity_query)
+		else
+			api_endpoint = "#{market_name}/entites/#{entity_UUID}/auditentries"
+		end
+		entity_data = get_list(api_endpoint)
+		
+		return entity_data
+	end
 
 
 

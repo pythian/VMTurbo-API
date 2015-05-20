@@ -1,0 +1,5 @@
+Build relationship checking for get_related_entities 
+Build test to check for parameters for all tests
+Build validation that data was returned  :: "No Valid XML Found"
+Build GET::entities - related notifications
+Impliment all POST and DELETE commmands 
