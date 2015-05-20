@@ -1,9 +1,11 @@
+#Required Modules
 require 'VMTConn'
 require 'nokogiri'
 require 'active_support/core_ext/hash/conversions'
 require 'yaml'
 require 'cgi'
 
+#Market Class - Used for accessing realtime and planning markets
 class Market
 
 	attr_accessor :vmt_userid,
@@ -75,6 +77,7 @@ class Market
 		return data_hash
 	end
 
+#Get single market information from VMT
 	def get_single_market_data(market_name)
 
 		##
@@ -93,7 +96,7 @@ class Market
 			return single_market_hash
 		end	
 	end
-	  
+#Get a list of all entities from a single market
 	def get_entity_list(market_name, entity_query = {})
 
 		##
@@ -120,9 +123,8 @@ class Market
 		entity_data = get_list(api_endpoint) 
 		
 		return entity_data
-
 	end
-
+#Get a list of entities by of a single type
 	def get_entity_by_type(market_name, entity_type, entity_query = {})
 		
 		##
@@ -153,7 +155,7 @@ class Market
 		entity_data = get_list(api_endpoint)
 		return entity_data
 	end
-
+#Get data for a single entity
 	def get_entity_by_name(market_name, entity_type, entity_name, entity_query = {})
 
 		##
@@ -187,8 +189,8 @@ class Market
 		entity_data = get_list(api_endpoint)
 
 		return entity_data
-
 	end
+	
 	def get_entity_services(market_name, entity_type, entity_name, entity_query = {})
 
 		##

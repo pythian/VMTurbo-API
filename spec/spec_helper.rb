@@ -1,6 +1,7 @@
 # Require VMTurbo APIs
 require_relative '../lib/VMTConn'
 require_relative '../lib/market'
+require_relative '../lib/reservations'
 
 #VMTurbo Connection Variables
 
