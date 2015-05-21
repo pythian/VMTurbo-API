@@ -12,29 +12,6 @@ describe Market do
 		it_behaves_like "a VMT API object"
 	end
 
-	describe "#query_builder" do
-		let(:api_endpoint) { 'Market/entities'}
-		let(:classname)    { 'Storage' }
-		let(:entity)	   { 'datastore-64' }
-		let(:property)     { 'priceIndex' }
-		let(:services)	   { 'capacity' }
-		let(:resource)     { 'Mem_utilization' }
-		let(:starttime)	   { '10291467' }
-		let(:endtime)	   { '95768342' }
-
-		context "will return a valid query" do
-			
-			it "returns a valid get_entity_list query without parameters" do
-				query = market.query_builder(api_endpoint, nil)
-				expect(query).to eql "Market/entities"
-			end
-			it "returns a valid get_entity_list query with parameters" do
-				query = market.query_builder(api_endpoint, {:classname => classname, entity: entity, property: property, service: services, resource: resource})
-				expect(query).to eql "Market/entities?classname=#{classname}&entity=#{entity}&property=#{property}&service=#{services}&resource=#{resource}"
-			end
-		end
-
-	end
 	describe "#entity_type_check" do
 		context "returns true with a valid type of" do
 			let(:result)      { true }

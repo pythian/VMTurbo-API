@@ -27,18 +27,15 @@ describe Reservation do
 			let(:data_result)	{reservation.get_reservation(reservation_ID, state)}
 			let(:state)			{{:state => 'RESERVED'}}
 
-			it "will return a populated hash" do
-				expect(data_result.length).to be >= 1
-			end
+			it_behaves_like 'return entity'
 		end
 	end
 
 	describe "#get_reservation_details" do
 		let(:reservation_ID)	{'_0ZyMkOhGEeS2kPR885AurA'}
 		let(:data_result)		{reservation.get_reservation(reservation_ID)}
-		it "will return reservation details" do
-			expect(data_result.length).to be >= 1
-		end
+		
+		it_behaves_like 'return entity'
 	end
 
 end
