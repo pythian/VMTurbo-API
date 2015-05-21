@@ -10,25 +10,6 @@ describe Reservation do
 		it_behaves_like 'a VMT API object'
 	end
 
-	describe "#query_builder" do
-		let(:api_endpoint) 	{ "/vmturbo/api/reservations" }
-		let(:state)			{"RESERVED"}
-
-		context "will return a valid query" do
-			
-			it "returns a valid get_entity_list query without parameters" do
-				query = reservation.query_builder(api_endpoint, nil)
-				expect(query).to eql "/vmturbo/api/reservations"
-			end
-
-			it "returns a valid get_entity_list query with parameters" do
-				query = reservation.query_builder(api_endpoint, {:state => state})
-				expect(query).to eql "/vmturbo/api/reservations?state=#{state}"
-			end
-		end
-
-	end
-
 	describe "#get_reservation" do
 		let(:entity_root) 	{'TopologyElements'}
 		let(:entity_node) 	{'TopologyElement'}
@@ -46,18 +27,15 @@ describe Reservation do
 			let(:data_result)	{reservation.get_reservation(reservation_ID, state)}
 			let(:state)			{{:state => 'RESERVED'}}
 
-			it "will return a populated hash" do
-				expect(data_result.length).to be > 0
-			end
+			it_behaves_like 'return entity'
 		end
 	end
 
 	describe "#get_reservation_details" do
 		let(:reservation_ID)	{'_0ZyMkOhGEeS2kPR885AurA'}
 		let(:data_result)		{reservation.get_reservation(reservation_ID)}
-		it "will return reservation details" do
-			expect(data_result.length).to be > 0
-		end
+		
+		it_behaves_like 'return entity'
 	end
 
 end

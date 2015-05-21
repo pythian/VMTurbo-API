@@ -5,9 +5,9 @@ require 'yaml'
 require 'cgi'
 require 'market'
 
-class Reservation
+class Template 
 
-	attr_accessor :vmt_userid,
+attr_accessor :vmt_userid,
 				  :vmt_password,
 				  :vmt_url
 
@@ -16,27 +16,26 @@ class Reservation
 		#Instance Vars
 		@vmt_userid   = vmt_userid
 		@vmt_password = vmt_password
-		@vmt_url	   = vmt_url
+		@vmt_url	  = vmt_url
 	end
 
-	def get_reservation(reservation_ID, state = {})
+	def get_template(template_ID)
 
 		##
-		# Gets a reservation details
+		# Gets a template details
 		#
 		# Optional Methods
-		# reservation_ID => UUID of the reservation  :: Default list all reservations
-		# state => 	the state of the reservation 	 :: Call the state of the reservation
+		# template_ID => UUID of the template    :: Default list all templates
 		##
 
-		if reservation_ID.nil?
-			get_reservation = VMTConn::query_builder("/vmturbo/api/reservations", state)
+		if template_ID.nil?
+			get_template = VMTConn::query_builder("/vmturbo/api/templates")
 		else
-			get_reservation = VMTConn::query_builder("/vmturbo/api/reservations/#{reservation_ID}", state)
+			get_template = VMTConn::query_builder("/vmturbo/api/templates/#{template_ID}")
 		end
 
 		conn = VMTConn.new(@vmt_userid, @vmt_password, @vmt_url)
-		response = conn.GetConnection(get_reservation)
+		response = conn.GetConnection(get_template)
 		data = Nokogiri::XML(response.body)
 		begin
 			data_hash = Hash.from_xml(data.to_s)
@@ -46,6 +45,4 @@ class Reservation
 		
 		return data_hash
 	end
-
-
 end

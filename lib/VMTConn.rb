@@ -1,5 +1,6 @@
 
 require "httparty"
+require 'active_support/core_ext/hash/conversions'
 
 class VMTConn
 	
@@ -18,6 +19,16 @@ class VMTConn
 		@vmt_userid   = vmt_userid
 		@vmt_password = vmt_password
 		@vmt_url      = vmt_url
+	end
+
+	def self.query_builder(api_endpoint, entity_options = {})
+		if entity_options.is_a?(Hash) 
+			query = entity_options.map {|k, v| "#{k}=#{v}" }.join("&")
+			query = api_endpoint + "?" + query
+		else
+			query = api_endpoint
+		end 
+		return query
 	end
 
 	def ValidUrl?(vmt_url)

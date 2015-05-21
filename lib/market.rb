@@ -10,7 +10,8 @@ class Market
 
 	attr_accessor :vmt_userid,
 				  :vmt_password,
-				  :vmt_url
+				  :vmt_url,
+				  :query_builder
 
 #Initalize Market Object
 	def initialize(vmt_userid, vmt_password, vmt_url)
@@ -35,17 +36,6 @@ class Market
 			else
 				false
 		end
-	end
-
-#Build query parameters for API call
-	def query_builder(api_endpoint, entity_options = {})
-		if entity_options.is_a?(Hash) 
-			query = entity_options.map {|k, v| "#{k}=#{v}" }.join("&")
-			query = api_endpoint + "?" + query
-		else
-			query = api_endpoint
-		end 
-		return query
 	end
 
 #Get list of markets from VMT
@@ -119,7 +109,7 @@ class Market
 		raise ArgumentError, "Bad Entity Type" if entity_query[:classname].nil? == false && entity_type_check(entity_query[:classname]) == false
 		
 		# Set API endpoint call based on options
-		api_endpoint = query_builder("#{market_name}/entities", entity_query)
+		api_endpoint = VMTConn::query_builder("#{market_name}/entities", entity_query)
 		entity_data = get_list(api_endpoint) 
 		
 		return entity_data
@@ -149,7 +139,7 @@ class Market
 		raise ArgumentError, "Bad Entity Type Passed" if !entity_type_check(entity_type)
 		
 		#Build api endpoint call to be passed
-		api_endpoint = query_builder("#{market_name}/#{entity_type}", entity_query)
+		api_endpoint = VMTConn::query_builder("#{market_name}/#{entity_type}", entity_query)
 
 		#Make the call to VMTurbo
 		entity_data = get_list(api_endpoint)
@@ -182,7 +172,7 @@ class Market
 		
 		#Build URI query and get data
 		if !entity_query.nil?
-			api_endpoint = query_builder("#{market_name}/#{entity_type}/#{entity_name}",entity_query)
+			api_endpoint = VMTConn::query_builder("#{market_name}/#{entity_type}/#{entity_name}",entity_query)
 		else
 			api_endpoint = "#{market_name}/#{entity_type}/#{entity_name}"
 		end
@@ -190,7 +180,7 @@ class Market
 
 		return entity_data
 	end
-	
+
 	def get_entity_services(market_name, entity_type, entity_name, entity_query = {})
 
 		##
@@ -215,7 +205,7 @@ class Market
 		
 		#Build URI query and get data
 		if !entity_query.nil?
-			api_endpoint = query_builder("#{market_name}/#{entity_type}/#{entity_name}/services",entity_query)
+			api_endpoint = VMTConn::query_builder("#{market_name}/#{entity_type}/#{entity_name}/services",entity_query)
 		else
 			api_endpoint = "#{market_name}/#{entity_type}/#{entity_name}/services"
 		end
@@ -248,7 +238,7 @@ class Market
 		
 		#Build URI query and get data
 		if !entity_query.nil?
-			api_endpoint = query_builder("#{market_name}/#{entity_type}/#{entity_name}/resources",entity_query)
+			api_endpoint = VMTConn::query_builder("#{market_name}/#{entity_type}/#{entity_name}/resources",entity_query)
 		else
 			api_endpoint = "#{market_name}/#{entity_type}/#{entity_name}/resources"
 		end
@@ -284,7 +274,7 @@ class Market
 		
 		#Build URI query and get data
 		if !entity_query.nil?
-			api_endpoint = query_builder("#{market_name}/#{source_entity_type}/#{entity_name}/#{related_entity_type}",entity_query)
+			api_endpoint = VMTConn::query_builder("#{market_name}/#{source_entity_type}/#{entity_name}/#{related_entity_type}",entity_query)
 		else
 			api_endpoint = "#{market_name}/#{source_entity_type}/#{entity_name}/#{related_entity_type}"
 		end
@@ -314,7 +304,7 @@ class Market
 		
 		#Build URI query and get data
 		if !entity_query.nil?
-			api_endpoint = query_builder("#{market_name}/#{entity_type}/#{entity_name}/actionitems",entity_query)
+			api_endpoint = VMTConn::query_builder("#{market_name}/#{entity_type}/#{entity_name}/actionitems",entity_query)
 		else
 			api_endpoint = "#{market_name}/#{entity_type}/#{entity_name}/actionitems"
 		end
@@ -342,7 +332,7 @@ class Market
 		
 		#Build URI query and get data
 		if !entity_query.nil?
-			api_endpoint = query_builder("#{market_name}/entities/#{entity_UUID}/auditentries",entity_query)
+			api_endpoint = VMTConn::query_builder("#{market_name}/entities/#{entity_UUID}/auditentries",entity_query)
 		else
 			api_endpoint = "#{market_name}/entites/#{entity_UUID}/auditentries"
 		end

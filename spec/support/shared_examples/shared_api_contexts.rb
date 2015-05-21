@@ -45,7 +45,8 @@ end
 
 shared_examples 'return entity' do
 	it "valid hash" do
-		expect(data_result[entity_root][entity_node][0][entity_attr]).to eql "#{valid_data}"
+		pp data_result
+		expect(data_result.length).to be >= 1
 	end
 end
 
