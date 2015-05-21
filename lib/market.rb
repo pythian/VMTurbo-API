@@ -10,7 +10,8 @@ class Market
 
 	attr_accessor :vmt_userid,
 				  :vmt_password,
-				  :vmt_url
+				  :vmt_url,
+				  :query_builder
 
 #Initalize Market Object
 	def initialize(vmt_userid, vmt_password, vmt_url)
@@ -38,7 +39,7 @@ class Market
 	end
 
 #Build query parameters for API call
-	def query_builder(api_endpoint, entity_options = {})
+	def self.query_builder(api_endpoint, entity_options = {})
 		if entity_options.is_a?(Hash) 
 			query = entity_options.map {|k, v| "#{k}=#{v}" }.join("&")
 			query = api_endpoint + "?" + query
@@ -190,7 +191,7 @@ class Market
 
 		return entity_data
 	end
-	
+
 	def get_entity_services(market_name, entity_type, entity_name, entity_query = {})
 
 		##

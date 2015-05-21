@@ -3,6 +3,7 @@ require 'nokogiri'
 require 'active_support/core_ext/hash/conversions'
 require 'yaml'
 require 'cgi'
+require 'market'
 
 class Reservation
 
@@ -18,16 +19,6 @@ class Reservation
 		@vmt_url	   = vmt_url
 	end
 
-	def query_builder(api_endpoint, reservation_options = {})
-		if reservation_options.is_a?(Hash) 
-			query = reservation_options.map {|k, v| "#{k}=#{v}" }.join("&")
-			query = api_endpoint + "?" + query
-		else
-			query = api_endpoint
-		end 
-		return query
-	end
-	
 	def get_reservation(reservation_ID, state = {})
 
 		##
@@ -39,9 +30,9 @@ class Reservation
 		##
 
 		if reservation_ID.nil?
-			get_reservation = query_builder("/vmturbo/api/reservations", state)
+			get_reservation = VMTConn::query_builder("/vmturbo/api/reservations", state)
 		else
-			get_reservation = query_builder("/vmturbo/api/reservations/#{reservation_ID}", state)
+			get_reservation = VMTConn::query_builder("/vmturbo/api/reservations/#{reservation_ID}", state)
 		end
 
 		conn = VMTConn.new(@vmt_userid, @vmt_password, @vmt_url)
