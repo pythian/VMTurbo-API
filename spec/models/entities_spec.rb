@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Entity do
-	subject(:entity) { Entity.new(vmt_userid, vmt_password, vmt_url) }
+	subject(:entity) {Entity.new(vmt_userid, vmt_password, vmt_url)}
  	
  	let(:vmt_userid)    { VMT_USERID }
 	let(:vmt_password)  { VMT_PASSWORD }
@@ -66,9 +66,8 @@ describe Entity do
 		context "will throw an exception" do
 			
 			let(:market_name) {'badmarketdata'}
-			it "if the market does not exist" do
-				expect{results = entity.get_single_market_data(market_name)}.to raise_exception ArgumentError
-			end
+			let(:data_result) {entity.get_single_market(market_name)}
+			it_behaves_like "Errors"
 		end
 	end
 
@@ -90,8 +89,8 @@ describe Entity do
 
 			context "all market entities" do
 
-				let(:data_result) {entity.get_entity_list(market_name)}				
-				let(:valid_data)        { "Application" }
+				let(:data_result) {subject.get_entity_list(market_name)}				
+				let(:valid_data)  { "Application" }
 				it_behaves_like 'return entity'
 				
 			end
@@ -101,22 +100,22 @@ describe Entity do
 				let(:classname)    {"Storage"}
 				let(:entity_query) {{:classname => classname}}
 				let(:valid_data)   { classname }
-				let(:data_result)  {entity.get_entity_list(market_name, entity_query)}
+				let(:data_result)  {subject.get_entity_list(market_name, entity_query)}
 
 				it_behaves_like 'return entity'	
 			end
 
 			context "single class entity" do
 				
-				let(:data_result)  {entity.get_entity_list(market_name, entity_query)}
+				let(:data_result)  {subject.get_entity_list(market_name, entity_query)}
 				let(:classname)    {'Storage'}
-				let(:entity)	   {'datastore-64'}
-				let(:entity_query) {{:classname => classname, :entity => entity}}
+				let(:entity_name)  {'datastore-64'}
+				let(:entity_query) {{:classname => classname, :entity => entity_name}}
 				let(:entity_attr)  {'name'}
-				let(:valid_data)   {entity}
+				let(:valid_data)   {entity_name}
 				
 				context "retuns a single entity valid hash" do
-					it_behaves_like 'get entity data'
+					it_behaves_like 'return entity'
 				end
 			end
 
@@ -125,7 +124,7 @@ describe Entity do
 				let(:market_name)  {"Market"}
 				let(:classname)    {"badentity"}
 				let(:entity_query) {{:classname => classname}}
-				let(:data_result)  {entity.get_entity_list(market_name, entity_query)}
+				let(:data_result)  {subject.get_entity_list(market_name, entity_query)}
 				
 				it_behaves_like 'Errors'
 			end
@@ -147,17 +146,17 @@ describe Entity do
 			let(:entity_root)   {'ServiceEntities'}
 			let(:entity_node)   {'ServiceEntity'}
 			let(:entity_type)   {'hosts'}
-			let(:entity)        {'com.xensource.xenapi.Host@b0e93fc6'}
+			let(:entity_name)   {'com.xensource.xenapi.Host@b0e93fc6'}
 			let(:entity_attr)   {'displayName'}
 			let(:valid_data)    {'XenServer1'}
-			let(:entity_query)  {{:entity => entity}}
-			let(:data_result)   {entity.get_entity_by_type(market_name, entity_type, entity_query)}
+			let(:entity_query)  {{:entity => entity_name}}
+			let(:data_result)   {subject.get_entity_by_type(market_name, entity_type, entity_query)}
 			
 			it_behaves_like 'get entity data'
 		end
 
 		context "will throw an exception" do
-			let(:data_result) {entity.get_entity_by_type(market_name, entity_type)}
+			let(:data_result) {subject.get_entity_by_type(market_name, entity_type)}
 			
 			context "with the wrong entity type" do
 				let(:entity_type) {'badentity'}

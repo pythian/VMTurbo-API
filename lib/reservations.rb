@@ -3,7 +3,7 @@ require 'nokogiri'
 require 'active_support/core_ext/hash/conversions'
 require 'yaml'
 require 'cgi'
-require 'market'
+require 'entities'
 
 class Reservation
 
