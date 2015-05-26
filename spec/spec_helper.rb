@@ -4,6 +4,7 @@ require_relative '../lib/reservations'
 require_relative '../lib/templates'
 require_relative '../lib/groups'
 require_relative '../lib/entities'
+require_relative '../lib/market'
 
 #VMTurbo Connection Variables
 
