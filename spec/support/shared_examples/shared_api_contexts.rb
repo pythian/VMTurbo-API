@@ -36,12 +36,6 @@ shared_examples 'a valid result' do
 	end
   
 end
-shared_examples 'return market' do
-	it "with a valid dataset" do
-		data_result = market.get_list(market_name)
-		expect(data_result[entity_root][entity_node][0][entity_attr]).to eql "#{valid_data}"
-	end
-end
 
 shared_examples 'return entity' do
 	it "valid hash" do

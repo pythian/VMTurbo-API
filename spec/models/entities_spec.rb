@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Market do
-	subject(:market) { Market.new(vmt_userid, vmt_password, vmt_url) }
+describe Entity do
+	subject(:entity) { Entity.new(vmt_userid, vmt_password, vmt_url) }
  	
  	let(:vmt_userid)    { VMT_USERID }
 	let(:vmt_password)  { VMT_PASSWORD }
@@ -49,26 +49,25 @@ describe Market do
 		context "will return all markets" do
 
 			let(:market_name) { nil }
-			it_behaves_like 'return market'
+			let(:data_result) {entity.get_list(market_name)}
+			it_behaves_like 'return entity'
 		end
 	end
 	
-	describe "#get_single_market_data" do
+	describe "#get_single_market" do
 
 		
-		context "will return a single market" do
+		context "will return a single market entity" do
 			
 			let(:market_name) {'Market'}
-			it "as a single hash" do			
-				results = market.get_single_market_data(market_name)
-				expect(results['displayName']).to eq "Market"
-			end
+			let(:data_result) {entity.get_single_market(market_name)}
+			it_behaves_like 'return entity'
 		end
 		context "will throw an exception" do
 			
 			let(:market_name) {'badmarketdata'}
 			it "if the market does not exist" do
-				expect{results = market.get_single_market_data(market_name)}.to raise_exception ArgumentError
+				expect{results = entity.get_single_market_data(market_name)}.to raise_exception ArgumentError
 			end
 		end
 	end
@@ -91,7 +90,7 @@ describe Market do
 
 			context "all market entities" do
 
-				let(:data_result) {market.get_entity_list(market_name)}				
+				let(:data_result) {entity.get_entity_list(market_name)}				
 				let(:valid_data)        { "Application" }
 				it_behaves_like 'return entity'
 				
@@ -102,14 +101,14 @@ describe Market do
 				let(:classname)    {"Storage"}
 				let(:entity_query) {{:classname => classname}}
 				let(:valid_data)   { classname }
-				let(:data_result)  {market.get_entity_list(market_name, entity_query)}
+				let(:data_result)  {entity.get_entity_list(market_name, entity_query)}
 
 				it_behaves_like 'return entity'	
 			end
 
 			context "single class entity" do
 				
-				let(:data_result)  {market.get_entity_list(market_name, entity_query)}
+				let(:data_result)  {entity.get_entity_list(market_name, entity_query)}
 				let(:classname)    {'Storage'}
 				let(:entity)	   {'datastore-64'}
 				let(:entity_query) {{:classname => classname, :entity => entity}}
@@ -126,7 +125,7 @@ describe Market do
 				let(:market_name)  {"Market"}
 				let(:classname)    {"badentity"}
 				let(:entity_query) {{:classname => classname}}
-				let(:data_result)  {market.get_entity_list(market_name, entity_query)}
+				let(:data_result)  {entity.get_entity_list(market_name, entity_query)}
 				
 				it_behaves_like 'Errors'
 			end
@@ -152,13 +151,13 @@ describe Market do
 			let(:entity_attr)   {'displayName'}
 			let(:valid_data)    {'XenServer1'}
 			let(:entity_query)  {{:entity => entity}}
-			let(:data_result)   {market.get_entity_by_type(market_name, entity_type, entity_query)}
+			let(:data_result)   {entity.get_entity_by_type(market_name, entity_type, entity_query)}
 			
 			it_behaves_like 'get entity data'
 		end
 
 		context "will throw an exception" do
-			let(:data_result) {market.get_entity_by_type(market_name, entity_type)}
+			let(:data_result) {entity.get_entity_by_type(market_name, entity_type)}
 			
 			context "with the wrong entity type" do
 				let(:entity_type) {'badentity'}
@@ -187,7 +186,7 @@ describe Market do
 
 		context "get entity data by name" do
 			
-			let(:data_result) {market.get_entity_by_name(market_name, entity_type, entity_name)}		
+			let(:data_result) {entity.get_entity_by_name(market_name, entity_type, entity_name)}		
 			let(:entity_name) {'datastore-64'}
 			let(:valid_data)  {entity_name}
 
@@ -195,7 +194,7 @@ describe Market do
 		end
 		context "get entity data by UUID" do
 			
-			let(:data_result) {market.get_entity_by_name(market_name, entity_type, entity_name)}
+			let(:data_result) {entity.get_entity_by_name(market_name, entity_type, entity_name)}
 			let(:entity_name) {'4f7c3a15-76877636-7a99-002590024b37'}
 			let(:entity_attr) {'uuid'}
 			let(:valid_data)  {entity_name}
@@ -203,7 +202,7 @@ describe Market do
 			it_behaves_like 'get entity data'
 		end
 		context "will throw an exception" do
-			let(:data_result) {market.get_entity_by_name(market_name, entity_type)}
+			let(:data_result) {entity.get_entity_by_name(market_name, entity_type)}
 			
 			context "with the wrong entity type" do
 				let(:entity_type) {'badentity'}
@@ -229,7 +228,7 @@ describe Market do
 		let(:resource)    { nil }
 		let(:starttime)   { nil }
 		let(:endtime)     { nil }
-		let(:data_result) {market.get_entity_services(market_name, entity_type, entity_name)}
+		let(:data_result) {entity.get_entity_services(market_name, entity_type, entity_name)}
 
 		context "get entity data by name" do
 
@@ -249,7 +248,7 @@ describe Market do
 		end
 
 		context "will throw an exception" do
-			let(:data_result) {market.get_entity_services(market_name, entity_type)}
+			let(:data_result) {entity.get_entity_services(market_name, entity_type)}
 			
 			context "with the wrong entity type" do
 				let(:entity_type) {'badentity'}
@@ -275,7 +274,7 @@ describe Market do
 		let(:resource)    { nil }
 		let(:starttime)   { nil }
 		let(:endtime)     { nil }
-		let(:data_result) {market.get_entity_resources(market_name, entity_type, entity_name)}
+		let(:data_result) {entity.get_entity_resources(market_name, entity_type, entity_name)}
 
 		context "get entity data by name" do
 
@@ -295,7 +294,7 @@ describe Market do
 		end
 
 		context "will throw an exception" do
-			let(:data_result) {market.get_entity_services(market_name, entity_type)}
+			let(:data_result) {entity.get_entity_services(market_name, entity_type)}
 			
 			context "with the wrong entity type" do
 				let(:entity_type) {'badentity'}
@@ -324,7 +323,7 @@ describe Market do
 		let(:resource)    			{ nil }
 		let(:starttime)   			{ nil }
 		let(:endtime)     			{ nil }
-		let(:data_result) 			{market.get_related_entities(market_name, source_entity_type, entity_name, related_entity_type)}
+		let(:data_result) 			{entity.get_related_entities(market_name, source_entity_type, entity_name, related_entity_type)}
 
 		context "get related entity data by name" do
 			it_behaves_like 'get entity data'
@@ -334,7 +333,7 @@ describe Market do
 			it_behaves_like 'get entity data'
 		end
 		context "will throw an exception" do
-			let(:data_result) {market.get_related_entities(market_name, entity_type)}
+			let(:data_result) {entity.get_related_entities(market_name, entity_type)}
 			
 			context "with the wrong entity type" do
 				let(:entity_type) {'badentity'}
@@ -362,7 +361,7 @@ describe Market do
 		let(:resource)    	{ nil }
 		let(:starttime)   	{ nil }
 		let(:endtime)       { nil }
-		let(:data_result) 	{market.get_entity_actions(market_name, entity_type, entity_name)}
+		let(:data_result) 	{entity.get_entity_actions(market_name, entity_type, entity_name)}
 
 		context "get related entity data by name" do
 			it_behaves_like 'get entity data'
@@ -372,7 +371,7 @@ describe Market do
 			it_behaves_like 'get entity data'
 		end
 		context "will throw an exception" do
-			let(:data_result) {market.get_entity_actions(market_name, entity_type, entity_name)}
+			let(:data_result) {entity.get_entity_actions(market_name, entity_type, entity_name)}
 			
 			context "with the wrong entity type" do
 				let(:entity_type) {'badentity'}
@@ -399,7 +398,7 @@ describe Market do
 		let(:resource)    	{ nil }
 		let(:starttime)   	{ nil }
 		let(:endtime)       { nil }
-		let(:data_result) 	{market.get_entity_audit_log(market_name, entity_UUID)}
+		let(:data_result) 	{entity.get_entity_audit_log(market_name, entity_UUID)}
 
 		context "get related entity data by name" do
 			it_behaves_like 'return entity'
@@ -417,28 +416,4 @@ describe Market do
 			end
 		end
 	end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 end

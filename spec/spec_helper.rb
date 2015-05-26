@@ -1,6 +1,6 @@
 # Require VMTurbo APIs
 require_relative '../lib/VMTConn'
-require_relative '../lib/market'
+require_relative '../lib/entities'
 require_relative '../lib/reservations'
 require_relative '../lib/templates'
 require_relative '../lib/groups'

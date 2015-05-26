@@ -5,15 +5,15 @@ require 'active_support/core_ext/hash/conversions'
 require 'yaml'
 require 'cgi'
 
-#Market Class - Used for accessing realtime and planning markets
-class Market
+#Entity Class - Used for accessing realtime and planning market entities
+class Entity
 
 	attr_accessor :vmt_userid,
 				  :vmt_password,
 				  :vmt_url,
 				  :query_builder
 
-#Initalize Market Object
+#Initalize Entity Object
 	def initialize(vmt_userid, vmt_password, vmt_url)
 
 		#Instance Vars
@@ -39,20 +39,20 @@ class Market
 	end
 
 #Get list of markets from VMT
-	def get_list(market_name)
+	def get_list(entity_endpoint)
 
 		##
 		# Gets a list of entities from a market
 		#
 		# Optional Methods
-		# market_name => name of market  :: Default list all markets
+		# entity_endpoint => entity api endpoint  :: Default list all markets
 		#
 		##
 
-		if market_name.nil?
+		if entity_endpoint.nil?
 			get_markets = "/vmturbo/api/markets"
 		else
-			get_markets = "/vmturbo/api/markets/#{market_name}"
+			get_markets = "/vmturbo/api/markets/#{entity_endpoint}"
 		end
 
 		conn = VMTConn.new(@vmt_userid, @vmt_password, @vmt_url)
@@ -68,7 +68,7 @@ class Market
 	end
 
 #Get single market information from VMT
-	def get_single_market_data(market_name)
+	def get_single_market(market_name)
 
 		##
 		# Will get a single market and return it as a single hash
