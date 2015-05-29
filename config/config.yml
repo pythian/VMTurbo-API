@@ -1,0 +1,8 @@
+#VMTurbo configuration file
+
+#Define login creditials 
+
+vmt_userid:   administrator
+vmt_password: Sysdreamworks123!
+vmt_hostname: http://10.32.141.13
+

@@ -1,8 +1,0 @@
-#VMTurbo configuration file
-
-#Setting Defaults
-defaults: &defaults
-	vmt_userid:   administrator
-	vmt_password: administrator
-	vmt_hostname: localhost
-
