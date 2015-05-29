@@ -4,3 +4,5 @@ Build validation that data was returned  :: "No Valid XML Found"
 Build GET::entities - related notifications
 Impliment all POST and DELETE commmands 
 Add GET notifications for Groups
+Fix camelcase in VMTConn GetConnection and ValidUrl
+Add test in VMTConn for query_builder and get_data
