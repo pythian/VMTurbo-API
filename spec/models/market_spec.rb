@@ -21,7 +21,7 @@ describe Market do
 	end
 
 	describe "#get_cluster_projections" do
-		let(:market)		{'Market'}
+		let(:market_name)		{'Market'}
 
 		context "will return cluster projections" do
 			context "for all clusters" do
@@ -30,9 +30,10 @@ describe Market do
 			end
 
 			context "for one entity type with cluster" do
-				let(:cluster_ID)	{''}
+				let(:cluster_ID)	{'7949e0f5ba674a7e81248102dfd01024f0b86929'}
 				let(:entity_type)	{'hosts'}
-				let(:data_result)	{market.get_cluster_projections(market_name, {entity_type: entity_type, cluster_ID: cluster_ID})}
+				let(:options)		{{:entity_type => entity_type, :cluster_ID => cluster_ID}}
+				let(:data_result)	{market.get_cluster_projections(market_name, options)}
 				it_behaves_like 'return entity'
 			end
 		end
@@ -47,7 +48,7 @@ describe Market do
 			end
 
 			context "if entity_type is set and group_ID is not" do
-				let(:cluster_ID)	{''}
+				let(:cluster_ID)	{'7949e0f5ba674a7e81248102dfd01024f0b86929'}
 				let(:entity_type)	{ nil }
 				it_behaves_like 'Errors'
 			
@@ -63,8 +64,8 @@ describe Market do
 	end
 
 	describe "#compare_market" do
+		let(:data_result)	{market.compare_market(market_name, comparison_type)}
 		context "will return comparison data for a market" do
-			let(:data_result)	{market.compare_market(market_name, comparison_type)}
 			context "with host comparison" do
 				let(:comparison_type)	{'hostcomparison'}
 				it_behaves_like 'return entity'

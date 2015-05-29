@@ -1,6 +1,8 @@
 
 require "httparty"
 require 'active_support/core_ext/hash/conversions'
+require 'nokogiri'
+require 'yaml'
 
 class VMTConn
 	
@@ -11,14 +13,16 @@ class VMTConn
 				  :vmt_password, 
 				  :vmt_url,
 				  :ValidUrl,
-				  :GetConnection
+				  :GetConnection,
+				  :get_data
 	
 	def initialize(vmt_userid, vmt_password, vmt_url)
 		
 		#Instance Vars
-		@vmt_userid   = vmt_userid
-		@vmt_password = vmt_password
-		@vmt_url      = vmt_url
+		vmt_config	  = YAML.load_file('config/config.yml')
+		@vmt_userid   = vmt_userid 		||= vmt_config['vmt_userid']
+		@vmt_password = vmt_password	||= vmt_config['vmt_password']
+		@vmt_url      = vmt_url			||= vmt_config['vmt_hostname']
 	end
 
 	def self.query_builder(api_endpoint, entity_options = {})
@@ -29,6 +33,19 @@ class VMTConn
 			query = api_endpoint
 		end 
 		return query
+	end
+
+	def self.get_data(api_endpoint)
+		conn = VMTConn.new(@vmt_userid, @vmt_password, @vmt_url)
+		response = conn.GetConnection(api_endpoint)
+		data = Nokogiri::XML(response.body)
+		begin
+			data_hash = Hash.from_xml(data.to_s)
+		rescue
+			data_hash = "No Valid XML Found"
+		end
+		
+		return data_hash
 	end
 
 	def ValidUrl?(vmt_url)
