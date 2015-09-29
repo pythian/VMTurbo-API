@@ -2,7 +2,7 @@
 
 #Define login creditials 
 
-vmt_userid:   administrator
-vmt_password: Sysdreamworks123!
-vmt_hostname: http://10.32.141.13
+vmt_userid:   YOURADMINNAME
+vmt_password: YOURPASSWORDHERE
+vmt_hostname: http://YOURENDPOINTADDRESSHERE
 
